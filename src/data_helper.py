@@ -1,5 +1,6 @@
 # intraday data path
 intraday_data_path = '../data/df_intraday_raw.parquet'
+processed_data_path = '../data/processed'
 
 # the code stocks of companies
 stock_companies = ['CTG', 'MBB', 'SHB', 'TCB', 'TPB']
@@ -22,3 +23,6 @@ train_size_ratio = 0.8
 # The parameters of LSTM model
 EPOCHS = 10
 BATCH_SIZE = 16
+
+# Flags
+check_alldata_flag = False

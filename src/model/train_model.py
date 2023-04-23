@@ -7,7 +7,9 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 
 # Local
-from ..data_helper import EPOCHS, BATCH_SIZE
+import data_helper as dh
+
+
 # Code
 def build_model(X_train, y_train, X_val, y_val):
     """
@@ -31,6 +33,6 @@ def build_model(X_train, y_train, X_val, y_val):
     model.compile(optimizer="adam", loss="mean_squared_error", metrics=['mean_absolute_error'])
 
     # Next, let's train the model:
-    model.fit(X_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, validation_data=(X_val, y_val))
+    model.fit(X_train, y_train, epochs=dh.EPOCHS, batch_size=dh.BATCH_SIZE, validation_data=(X_val, y_val))
 
     return model
