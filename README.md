@@ -10,7 +10,7 @@ git clone https://github.com/mrtrunghieu1/Vietnamese_stock_prediction.git
 
 ```
 
-Next, navigate to the stocks of companies
+Next, navigate to the stocks of companies.
 Notice the structure of data folder.
 
 ![img.png](img.png)
