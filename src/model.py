@@ -13,7 +13,7 @@ import data_helper as dh
 # Code
 def build_model(X_train, y_train, X_val, y_val):
     """
-    The build_model function builds and trains an LSTM model using the training and validation data.
+    The build_model function builds and trains an LSTM models using the training and validation data.
 
     Parameters:
         X_train: Training data features
@@ -22,9 +22,9 @@ def build_model(X_train, y_train, X_val, y_val):
         y_val: Validation data labels
 
     Returns:
-        model: Trained LSTM model
+        models: Trained LSTM models
     """
-    # Build the LSTM model
+    # Build the LSTM models
     model = Sequential()
     model.add(LSTM(50, activation="relu", return_sequences=True, input_shape=(X_train.shape[1], 1)))
     model.add(LSTM(50, return_sequences=False))
@@ -32,7 +32,7 @@ def build_model(X_train, y_train, X_val, y_val):
     model.add(Dense(1))
     model.compile(optimizer="adam", loss="mean_squared_error", metrics=['mean_absolute_error'])
 
-    # Next, let's train the model:
+    # Next, let's train the models:
     model.fit(X_train, y_train, epochs=dh.EPOCHS, batch_size=dh.BATCH_SIZE, validation_data=(X_val, y_val))
 
     return model

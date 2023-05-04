@@ -1,21 +1,18 @@
 # Standard lib
-import os
-import sys
-import datetime
-import time
 
 # Third party
-import pandas as pd
 
 # Local
 from preprocessing import data_preprocessing, split_data
-from data_helper import intraday_data_path, processed_data_path
+from data_helper import intraday_data_path, processed_data_path, results_path
 from data_helper import stock_companies, check_alldata_flag
-from model.train_model import build_model
+from model import build_model
+from evaluation import OutputWriter
 from utils import *
 
 # Code
 for stock_company in stock_companies:
+    output_writer = OutputWriter(stock_company, os.path.join(results_path, stock_company))
     if check_alldata_flag:
         # Read intraday data file
         intraday_df = pd.read_parquet(intraday_data_path, engine='fastparquet')
@@ -23,8 +20,7 @@ for stock_company in stock_companies:
         print(datetime.datetime.now(), 'Processing the stock of {} company'.format(stock_company))
         df = intraday_df[intraday_df['Code'] == stock_company]
         df = split_time_interval(df)
-        print(df.head())
-        df.to_csv(os.path.join(processed_data_path, '{}.csv'.format(stock_company)))
+        output_writer.write_data(processed_data_path, df)
     # Data Processing the stock market
     processed_companies = os.listdir(processed_data_path)
     check_stock_existence(stock_company, processed_companies)
@@ -32,11 +28,16 @@ for stock_company in stock_companies:
     file_csv = os.path.join(processed_data_path, '{}.csv'.format(stock_company))
     df = pd.read_csv(file_csv)
     df['date'] = df['date'].astype("datetime64[ns]")
-    scaler, scaled_data, dataframe = data_preprocessing(df)
+    scaler, scaler_X, scaler_y, dataframe = data_preprocessing(df)
     train_dates, X_train, y_train, val_dates, X_val, y_val, test_dates, X_test, y_test = split_data(dataframe,
-                                                                                                    scaled_data)
-    # Train LSTM model
+                                                                                                    scaler_X, scaler_y)
+    # Train LSTM models
     model = build_model(X_train, y_train, X_val, y_val)
     test_predictions = model.predict(X_test)
-    print(test_predictions.shape)
+    test_predict = scaler.inverse_transform(test_predictions)
+    test_ground_truth = scaler.inverse_transform(y_test)
 
+    # Write the results
+    output_writer.write_output_csv(test_dates, test_ground_truth, test_predict)
+    output_writer.write_output_info(test_ground_truth, test_predict)
+    # Visualization the results
