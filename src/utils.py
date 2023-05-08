@@ -41,15 +41,26 @@ def split_time_interval(df):
     Returns:
         df_copy: A pandas DataFrame containing the open, close, high, low, and date values for each hourly interval.
     """
+    # df_copy = df.copy()
+    # df_copy.set_index('intra_day', inplace=True)
+    # df_copy = df_copy.groupby([pd.Grouper(freq='D'), pd.Grouper(freq='60T')]).agg(
+    #     {'Price': ['first', 'last', 'max', 'min', lambda x: tuple(x.nsmallest(2))]})
+    # df_copy['date'] = df_copy.index.get_level_values(-1)
+    # # df_copy = df_copy.reset_index(drop=True)
+    # # df_copy.columns = df_copy.columns.map('_'.join)
+    # # df_copy.rename(columns=price_names, inplace=True)
+    # # df_copy = df_copy.reindex(columns=['date', 'open', 'close', 'high', 'low'])
+
     df_copy = df.copy()
     df_copy.set_index('intra_day', inplace=True)
     df_copy = df_copy.groupby([pd.Grouper(freq='D'), pd.Grouper(freq='60T')]).agg(
-        {'Price': ['first', 'last', 'max', 'min']})
+        {'Price': ['first', 'last', 'max', 'min', lambda x: sorted(set(x))[1:2]]})
     df_copy['date'] = df_copy.index.get_level_values(-1)
     df_copy = df_copy.reset_index(drop=True)
     df_copy.columns = df_copy.columns.map('_'.join)
     df_copy.rename(columns=price_names, inplace=True)
-    df_copy = df_copy.reindex(columns=['date', 'open', 'close', 'high', 'low'])
+    df_copy['low_2'] = [x[0] if len(x) > 0 else df_copy['low'][i] for i, x in enumerate(df_copy['low_2'])]
+    df_copy = df_copy.reindex(columns=['date', 'open', 'close', 'high', 'low', 'low_2'])
     return df_copy
 
 

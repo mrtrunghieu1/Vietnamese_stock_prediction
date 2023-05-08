@@ -23,12 +23,21 @@ class OutputWriter:
             os.makedirs(processed_data_path)
         df.to_csv(os.path.join(processed_data_path, '{}.csv'.format(self.name_stock)))
 
-    def write_output_csv(self, test_dates, ground_truth, predictions):
+    def write_output_csv(self, test_dates, ground_truth, predictions, df_min1, df_min2):
+
+        ground_truth_arr = np.vectorize(round)(ground_truth, 2)
+        ground_truth_list = ground_truth_arr.flatten().tolist()
+
+        predictions_arr = np.vectorize(round)(predictions, 2)
+        predictions_list = predictions_arr.flatten().tolist()
+
         df = pd.DataFrame({
             'date': test_dates,
             'code': ['{}'.format(self.name_stock)] * len(ground_truth),
-            'close_ground_truth': np.squeeze(ground_truth),
-            'close_predictions': np.squeeze(predictions)
+            'close_ground_truth': ground_truth_list,
+            'first_smallest_price': df_min1,
+            'second_smallest_price': df_min2,
+            'close_predictions': predictions_list
         })
         df.to_csv(os.path.join(self.output_path, '{}.csv'.format(self.name_stock)))
         print("Save the {} stock successfully!".format(self.name_stock))

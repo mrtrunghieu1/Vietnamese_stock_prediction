@@ -36,7 +36,6 @@ def data_preprocessing(df):
 
     df_copy = df_copy.set_index("date")
     df_copy = df_copy.astype(float)
-
     # scaler
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaler_X = scaler.fit_transform(df_copy[df_copy.columns[:-1]])
@@ -45,7 +44,7 @@ def data_preprocessing(df):
     return scaler, scaler_X, scaler_y, df_copy
 
 
-def split_data(dataframe, scaler_X, scaler_y):
+def split_data(dataframe, scaler_X, scaler_y, df_low, df_low2):
     """
     This function splits the input dataset into training, validation, and test sets based on the specific day.
     and returns the corresponding data arrays.
@@ -57,15 +56,6 @@ def split_data(dataframe, scaler_X, scaler_y):
                     "high", "low", and "close" prices.
 
     Returns:
-        train_dates: A NumPy array containing the dates for the training set.
-        X_train: A NumPy array containing the feature data for the training set.
-        y_train: A NumPy array containing the target data for the training set.
-        val_dates: A NumPy array containing the dates for the validation set.
-        X_val: A NumPy array containing the feature data for the validation set.
-        y_val: A NumPy array containing the target data for the validation set.
-        test_dates: A NumPy array containing the dates for the test set.
-        X_test: A NumPy array containing the feature data for the test set.
-        y_test: A NumPy array containing the target data for the test set.
     """
     # Find the index of the first timestamp that is greater than or equal to boundary_idx_test("24-02-2023")
     dates = dataframe.index
@@ -74,12 +64,13 @@ def split_data(dataframe, scaler_X, scaler_y):
     # Split the data into training/validation and test sets
     train_val_dates, train_val_X, train_val_y = dates[:boundary_idx], scaler_X[:boundary_idx], scaler_y[:boundary_idx]
     test_dates, test_X, test_y = dates[boundary_idx:], scaler_X[boundary_idx:], scaler_y[boundary_idx:]
+    df_min1, df_min2 = df_low[boundary_idx:], df_low2[boundary_idx:]
 
     # Further split the training/validation set into the training and validation sets
     train_size = int(len(train_val_X) * train_size_ratio)
 
     train_dates, X_train, y_train = train_val_dates[:train_size], train_val_X[:train_size, :], train_val_y[
-                                                                                                    :train_size, :]
+                                                                                               :train_size, :]
     val_dates, X_val, y_val = train_val_dates[train_size:], train_val_X[train_size:], train_val_y[
-                                                                                              train_size:, :]
-    return train_dates, X_train, y_train, val_dates, X_val, y_val, test_dates, test_X, test_y
+                                                                                      train_size:, :]
+    return train_dates, X_train, y_train, val_dates, X_val, y_val, test_dates, test_X, test_y, df_min1, df_min2

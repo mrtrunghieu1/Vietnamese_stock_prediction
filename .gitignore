@@ -1,1 +1,6 @@
 data
+__pycache__/
+src/__pycache__/data_helper.cpython-39.pyc
+src/__pycache__/evaluation.cpython-39.pyc
+src/__pycache__/preprocessing.cpython-39.pyc
+src/__pycache__/utils.cpython-39.pyc

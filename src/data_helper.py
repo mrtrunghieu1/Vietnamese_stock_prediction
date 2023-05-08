@@ -12,6 +12,7 @@ price_names = {
     'Price_last': 'close',
     'Price_max': 'high',
     'Price_min': 'low',
+    'Price_<lambda_0>': 'low_2',
     'date_': 'date'
 }
 
@@ -26,4 +27,4 @@ EPOCHS = 10
 BATCH_SIZE = 16
 
 # Flags
-check_alldata_flag = True
+check_alldata_flag = False
