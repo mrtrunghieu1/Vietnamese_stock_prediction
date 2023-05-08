@@ -37,3 +37,19 @@ cd src
 python main.py
 ```
 
+### Results
+We can see the structure of results
+```bash
+.
+|- Results
+|  |-- CTG
+|     |-- CTG.csv   // close_groundtruth, first_smallest, second_smallest, preiction
+|     |-- CTG.json  // report the performance such as MAE, R2,...
+|  |-- TCB
+|     |-- TCB.csv   // close_groundtruth, first_smallest, second_smallest, preiction
+|     |-- TCB.json  // report the performance such as MAE, R2,...
+|  |-- ...
+```
+
+
+
