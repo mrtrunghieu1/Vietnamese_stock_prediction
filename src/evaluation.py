@@ -23,7 +23,7 @@ class OutputWriter:
             os.makedirs(processed_data_path)
         df.to_csv(os.path.join(processed_data_path, '{}.csv'.format(self.name_stock)))
 
-    def write_output_csv(self, test_dates, ground_truth, predictions, df_min1, df_min2):
+    def write_output_csv(self, test_dates, ground_truth, predictions, df_min1, df_min2, df_open, df_high):
 
         ground_truth_arr = np.vectorize(round)(ground_truth, 2)
         ground_truth_list = ground_truth_arr.flatten().tolist()
@@ -34,6 +34,8 @@ class OutputWriter:
         df = pd.DataFrame({
             'date': test_dates,
             'code': ['{}'.format(self.name_stock)] * len(ground_truth),
+            'open': df_open,
+            'high': df_high,
             'close_ground_truth': ground_truth_list,
             'first_smallest_price': df_min1,
             'second_smallest_price': df_min2,

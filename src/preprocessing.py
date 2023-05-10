@@ -60,12 +60,11 @@ def split_data(dataframe, scaler_X, scaler_y, df_low, df_low2):
     # Find the index of the first timestamp that is greater than or equal to boundary_idx_test("24-02-2023")
     dates = dataframe.index
     boundary_idx = dataframe.index.searchsorted(pd.Timestamp(boundary_idx_test))
-
     # Split the data into training/validation and test sets
     train_val_dates, train_val_X, train_val_y = dates[:boundary_idx], scaler_X[:boundary_idx], scaler_y[:boundary_idx]
     test_dates, test_X, test_y = dates[boundary_idx:], scaler_X[boundary_idx:], scaler_y[boundary_idx:]
     df_min1, df_min2 = df_low[boundary_idx:], df_low2[boundary_idx:]
-
+    df_open, df_high = dataframe['open'][boundary_idx:].tolist(), dataframe['high'][boundary_idx:].tolist()
     # Further split the training/validation set into the training and validation sets
     train_size = int(len(train_val_X) * train_size_ratio)
 
@@ -73,4 +72,5 @@ def split_data(dataframe, scaler_X, scaler_y, df_low, df_low2):
                                                                                                :train_size, :]
     val_dates, X_val, y_val = train_val_dates[train_size:], train_val_X[train_size:], train_val_y[
                                                                                       train_size:, :]
-    return train_dates, X_train, y_train, val_dates, X_val, y_val, test_dates, test_X, test_y, df_min1, df_min2
+    return train_dates, X_train, y_train, val_dates, X_val, y_val, test_dates, test_X, test_y, df_min1, \
+        df_min2, df_open, df_high
