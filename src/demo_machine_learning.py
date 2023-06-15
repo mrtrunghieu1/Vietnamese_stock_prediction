@@ -1,8 +1,3 @@
-# Standard lib
-
-# Third party
-
-# Local
 from preprocessing import data_preprocessing, split_data
 from data_helper import intraday_data_path, processed_data_path, results_path
 from data_helper import stock_companies, check_alldata_flag
@@ -29,7 +24,9 @@ for stock_company in stock_companies:
     file_csv = os.path.join(processed_data_path, '{}.csv'.format(stock_company))
     df = pd.read_csv(file_csv)
     df['date'] = df['date'].astype("datetime64[ns]")
+
     scaler, scaler_X, scaler_y, dataframe = data_preprocessing(df)
+
     train_dates, X_train, y_train, val_dates, X_val, y_val, test_dates, X_test, y_test, \
         df_min1, df_min2, df_open, df_high = split_data(dataframe, scaler_X, scaler_y, df['low'], df['low_2'])
     # Train LSTM models

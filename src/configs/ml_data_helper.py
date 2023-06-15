@@ -1,7 +1,7 @@
 # intraday data path
 intraday_data_path = '../data/df_intraday_raw.parquet'
 processed_data_path = '../data/processed'
-results_path = '../results'
+results_path = '../../results'
 
 # the code stocks of companies
 stock_companies = ['CTG', 'MBB', 'SHB', 'TCB', 'TPB']
@@ -27,4 +27,4 @@ EPOCHS = 10
 BATCH_SIZE = 16
 
 # Flags
-check_alldata_flag = False
+check_alldata_flag = True
