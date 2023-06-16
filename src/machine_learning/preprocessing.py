@@ -1,5 +1,4 @@
 # Standard lib
-import os
 
 import numpy as np
 # Third party
@@ -7,7 +6,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 # Local
-from data_helper import boundary_idx_test, train_size_ratio
+from src.configs.ml_data_helper import boundary_idx_test, train_size_ratio
 
 
 # Code
