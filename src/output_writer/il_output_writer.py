@@ -1,10 +1,14 @@
-from output_writer.base import OutputWriter
+# from output_writer.base import OutputWriter
+from utils import check_folder_exists, get_stock_name
+import os
 
 
-class ILOutputWriter(OutputWriter):
+class ILOutputWriter:
     """Write Output for the incremental learning"""
-    def __int__(self):
-        super().__int__("data_generation")
 
-    def generate_data(self, data, path):
-        data.to_csv(path, index=False)
+    def __init__(self, name_stock):
+        self.name_stock = name_stock
+
+    def write_data(self, result_path, df):
+        check_folder_exists(result_path)
+        df.to_csv(os.path.join(result_path, '{}.csv'.format(get_stock_name(self.name_stock))), index=False)
